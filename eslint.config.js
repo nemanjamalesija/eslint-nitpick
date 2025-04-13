@@ -1,28 +1,31 @@
-import configBase from 'eslint-config-nitpick';
-import configTypescript from 'eslint-config-nitpick/typescript';
-import configBrowser from 'eslint-config-nitpick/browser';
-import configVue from 'eslint-config-nitpick/vue';
-import configPrettier from 'eslint-config-prettier';
-import pluginImport from 'eslint-plugin-import';
-import pluginPrettier from 'eslint-plugin-prettier';
-import pluginUnicorn from 'eslint-plugin-unicorn';
+import { defineConfig } from 'eslint/config';
+import js from '@eslint/js';
+import globals from 'globals';
+import tseslint from 'typescript-eslint';
+import pluginVue from 'eslint-plugin-vue';
+import importPlugin from 'eslint-plugin-import';
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 
-export default [
-	configBase,
-	configBrowser,
-	configTypescript,
-	...configVue,
-	configPrettier,
+export default defineConfig([
 	{
-		plugins: {
-			import: pluginImport,
-			prettier: pluginPrettier,
-			unicorn: pluginUnicorn
-		},
-		'rules': {
-			'import/prefer-default-export': 0,
-			'unicorn/explicit-length-check': 0,
-			'prettier/prettier': 1,
+		files: ['**/*.{js,mjs,cjs,ts,vue}'],
+		plugins: { js },
+		extends: ['js/recommended']
+	},
+	{
+		files: ['**/*.{js,mjs,cjs,ts,vue}'],
+		languageOptions: { globals: globals.browser }
+	},
+	tseslint.configs.recommended,
+	pluginVue.configs['flat/essential'],
+	{
+		files: ['**/*.vue'],
+		languageOptions: { parserOptions: { parser: tseslint.parser } }
+	},
+	{
+		files: ['**/*.{ts,tsx,vue}'],
+		extends: [importPlugin.flatConfigs.recommended, importPlugin.flatConfigs.typescript],
+		rules: {
 			'import/order': [
 				1,
 				{
@@ -36,45 +39,17 @@ export default [
 					'newlines-between': 'never'
 				}
 			],
-			'object-shorthand': 0,
-			'capitalized-comments': 0,
-			'quote-props': 0,
-			'multiline-comment-style': 0,
-			'no-useless-return': 0,
-			'dot-notation': 0,
-			'unicorn/filename-case': [
-				2,
-				{
-					'case': 'kebabCase'
-				}
-			],
-			'unicorn/prevent-abbreviations': 0,
-			'unicorn/prefer-string-slice': 0,
-			'unicorn/prefer-dataset': 0,
-			'unicorn/prefer-dom-node-dataset': 0,
-			'unicorn/no-lonely-if': 0,
-			'unicorn/prefer-spread': 0,
-			'unicorn/prefer-flat-map': 0,
-			'unicorn/prefer-at': 0,
-			'unicorn/prefer-object-has-own': 0,
-			'unicorn/prefer-object-from-entries': 0,
-			'prefer-object-has-own': 0,
-			'no-useless-escape': 0,
+			'import/prefer-default-export': 0,
 			'import/named': 2,
 			'import/default': 2,
-			'unicorn/prefer-native-coercion-functions': 0,
-			'unicorn/no-useless-promise-resolve-reject': 0,
-			'unicorn/no-await-expression-member': 0,
-			'unicorn/prefer-module': 2,
 			'import/no-commonjs': 2,
-			'import/no-unresolved': 2
+			'import/no-unresolved': 2,
+			'import/no-nodejs-modules': 2
 		}
 	},
-
 	{
-		'files': ['src/**/*'],
-		'rules': {
-			'import/no-nodejs-modules': 2,
+		files: ['**/*.vue'],
+		rules: {
 			'vue/v-if-else-key': 0,
 			'vue/require-default-prop': 0,
 			'vue/new-line-between-multi-line-property': 0,
@@ -147,8 +122,5 @@ export default [
 			]
 		}
 	},
-
-	{
-		ignores: ['**/*.json']
-	}
-];
+	eslintPluginPrettierRecommended
+]);
