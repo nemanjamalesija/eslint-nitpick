@@ -1,33 +1,130 @@
-{
-  "name": "Typescript Es lint config for vue projects",
-  "private": true,
-  "version": "0.0.0",
-  "type": "module",
-  "scripts": {
-    "dev": "vite",
-    "build": "vite build",
-    "preview": "vite preview"
-  },
-  "dependencies": {
-    "vue": "^3.5.13"
-  },
-  "devDependencies": {
-    "@eslint/js": "^9.27.0",
-    "@types/node": "^22.15.21",
-    "@typescript-eslint/eslint-plugin": "^8.32.1",
-    "@typescript-eslint/parser": "^8.32.1",
-    "@vitejs/plugin-vue": "^5.2.1",
-    "@vue/tsconfig": "^0.7.0",
-    "eslint": "^9.27.0",
-    "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-import": "^2.31.0",
-    "eslint-plugin-prettier": "^5.4.0",
-    "eslint-plugin-vue": "^10.1.0",
-    "globals": "^16.1.0",
-    "jiti": "^2.4.2",
-    "prettier": "^3.5.3",
-    "typescript": "~5.7.2",
-    "vite": "^6.2.0",
-    "vue-tsc": "^2.2.4"
-  }
-}
+import js from '@eslint/js';
+/* eslint-disable */
+import { defineConfig } from 'eslint/config';
+import tseslint from 'typescript-eslint';
+/* eslint-enable */
+import globals from 'globals';
+import pluginVue from 'eslint-plugin-vue';
+import * as importPlugin from 'eslint-plugin-import';
+import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+
+export default defineConfig([
+	...tseslint.configs.recommended,
+	pluginVue.configs['flat/essential'],
+	importPlugin.flatConfigs.recommended,
+	importPlugin.flatConfigs.typescript,
+	{
+		files: ['**/*.{js,mjs,cjs,ts,vue}'],
+		plugins: { js },
+		extends: ['js/recommended']
+	},
+	{
+		files: ['**/*.{js,mjs,cjs,ts,vue}'],
+		languageOptions: { globals: globals.browser }
+	},
+
+	{
+		files: ['**/*.vue'],
+		languageOptions: { parserOptions: { parser: tseslint.parser } }
+	},
+	{
+		files: ['**/*.{ts,tsx,vue}'],
+		rules: {
+			'import/order': [
+				1,
+				{
+					'pathGroups': [
+						{
+							'pattern': 'vue',
+							'group': 'external',
+							'position': 'before'
+						}
+					],
+					'newlines-between': 'never'
+				}
+			],
+			'import/prefer-default-export': 0,
+			'import/named': 2,
+			'import/default': 2,
+			'import/no-commonjs': 2,
+			'import/no-unresolved': 2,
+			'import/no-nodejs-modules': 2
+		}
+	},
+	{
+		files: ['**/*.vue'],
+		rules: {
+			'vue/v-if-else-key': 0,
+			'vue/require-default-prop': 0,
+			'vue/new-line-between-multi-line-property': 0,
+			'vue/no-multiple-template-root': 0,
+			'vue/no-v-for-template-key': 0,
+			'vue/v-on-event-hyphenation': 0,
+			'vue/custom-event-name-casing': 0,
+			'vue/no-reserved-component-names': 0,
+			'vue/require-explicit-emits': 0,
+			'vue/prefer-prop-type-boolean-first': 0,
+			'vue/no-static-inline-styles': 0,
+			'vue/no-undef-components': [
+				2,
+				{
+					'ignorePatterns': ['RouterView', 'RouterLink']
+				}
+			],
+			'vue/component-name-in-template-casing': [
+				2,
+				'PascalCase',
+				{
+					'ignores': [
+						'svg',
+						'rect',
+						'component',
+						'transition',
+						'transition-group',
+						'keep-alive',
+						'slot'
+					]
+				}
+			],
+			'vue/order-in-components': [
+				2,
+				{
+					'order': [
+						'el',
+						'name',
+						'key',
+						'parent',
+						'functional',
+						['delimiters', 'comments'],
+						['components', 'directives', 'filters'],
+						'extends',
+						'mixins',
+						['provide', 'inject'],
+						'ROUTER_GUARDS',
+						'layout',
+						'validate',
+						'scrollToTop',
+						'transition',
+						'loading',
+						'inheritAttrs',
+						'model',
+						['props', 'propsData'],
+						'emits',
+						'setup',
+						'data',
+						'fetch',
+						'head',
+						'computed',
+						'watch',
+						'watchQuery',
+						'LIFECYCLE_HOOKS',
+						'methods',
+						['template', 'render'],
+						'renderError'
+					]
+				}
+			]
+		}
+	},
+	eslintPluginPrettierRecommended
+]);
