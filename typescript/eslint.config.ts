@@ -1,14 +1,21 @@
 import js from '@eslint/js';
-/* eslint-disable */
 import { defineConfig } from 'eslint/config';
-import tseslint from 'typescript-eslint';
-/* eslint-enable */
+import tseslint, { parser } from 'typescript-eslint';
 import globals from 'globals';
 import pluginVue from 'eslint-plugin-vue';
 import * as importPlugin from 'eslint-plugin-import';
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
 
 export default defineConfig([
+	{
+		settings: {
+			'import/resolver': {
+				typescript: {
+					project: './tsconfig.json'
+				}
+			}
+		}
+	},
 	...tseslint.configs.recommended,
 	pluginVue.configs['flat/essential'],
 	importPlugin.flatConfigs.recommended,
@@ -25,7 +32,7 @@ export default defineConfig([
 
 	{
 		files: ['**/*.vue'],
-		languageOptions: { parserOptions: { parser: tseslint.parser } }
+		languageOptions: { parserOptions: { parser } }
 	},
 	{
 		files: ['**/*.{ts,tsx,vue}'],
@@ -48,12 +55,16 @@ export default defineConfig([
 			'import/default': 2,
 			'import/no-commonjs': 2,
 			'import/no-unresolved': 2,
-			'import/no-nodejs-modules': 2
+			'import/no-nodejs-modules': 2,
+			'@typescript-eslint/no-explicit-any': 0,
+			'@typescript-eslint/ban-ts-comment': 2,
+			'no-console': 2
 		}
 	},
 	{
 		files: ['**/*.vue'],
 		rules: {
+			'vue/multi-word-component-names': 0,
 			'vue/v-if-else-key': 0,
 			'vue/require-default-prop': 0,
 			'vue/new-line-between-multi-line-property': 0,
@@ -126,5 +137,16 @@ export default defineConfig([
 			]
 		}
 	},
+	{
+		files: ['vite.config.ts', 'server/**/*.{js,ts}'],
+		languageOptions: {
+			globals: globals.node
+		},
+		rules: {
+			'import/no-nodejs-modules': 0
+		}
+	},
+
 	eslintPluginPrettierRecommended
 ]);
+
