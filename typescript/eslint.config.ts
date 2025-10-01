@@ -50,6 +50,10 @@ export default defineConfig([
 					'newlines-between': 'never'
 				}
 			],
+			'vue/no-unused-properties': [
+				1,
+				{ groups: ['props', 'data', 'computed', 'methods', 'setup'] }
+			],
 			'import/prefer-default-export': 0,
 			'import/named': 2,
 			'import/default': 2,
