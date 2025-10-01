@@ -49,7 +49,10 @@ export default defineConfig([
 	},
 	{
 		files: ['**/*.vue'],
-		rules: {
+		rules: {'vue/no-unused-properties': [
+				1,
+				{ groups: ['props', 'data', 'computed', 'methods', 'setup'] }
+			],
 			'vue/v-if-else-key': 0,
 			'vue/require-default-prop': 0,
 			'vue/new-line-between-multi-line-property': 0,
