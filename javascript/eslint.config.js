@@ -49,7 +49,8 @@ export default defineConfig([
 	},
 	{
 		files: ['**/*.vue'],
-		rules: {'vue/no-unused-properties': [
+		rules: {
+			'vue/no-unused-properties': [
 				1,
 				{ groups: ['props', 'data', 'computed', 'methods', 'setup'] }
 			],
