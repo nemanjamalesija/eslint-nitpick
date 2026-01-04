@@ -17,6 +17,12 @@ export default defineConfig([
     },
     {
         files: ['**/*.{ts,tsx,vue}'],
+        languageOptions: {
+            parserOptions: {
+                project: './tsconfig.json',
+                tsconfigRootDir: import.meta.dirname,
+            }
+        },
         plugins: {
             import: importPlugin
         },
@@ -128,6 +134,10 @@ export default defineConfig([
                     ]
                 }
             ]
+        }
+    }
+]);
+
         }
     }
 ]);
