@@ -5,7 +5,7 @@ import pluginVue from 'eslint-plugin-vue';
 import importPlugin from 'eslint-plugin-import';
 import { defineConfig } from 'eslint/config';
 import vueParser from 'vue-eslint-parser';
-import pluginPrettier from 'eslint-plugin-prettier'; // Add this
+import pluginPrettier from 'eslint-plugin-prettier';
 import configPrettier from 'eslint-config-prettier';
 
 export default defineConfig([
