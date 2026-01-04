@@ -202,5 +202,11 @@ export default defineConfig([
                 }
             ]
         }
+    },
+    {
+        files: ['*.config.{js,ts,mjs,mts}', '*.setup.{js,ts}'],
+        rules: {
+            'import/no-nodejs-modules': 0
+        }
     }
 ]);
