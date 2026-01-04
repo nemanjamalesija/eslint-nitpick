@@ -12,29 +12,42 @@ export default defineConfig([
     {
         files: ['**/*.{js,mjs,cjs,ts,mts,cts,vue}'],
         languageOptions: {
-            globals: globals.browser
+            globals: globals.browser,
+            parserOptions: {
+                ecmaVersion: 'latest',
+                sourceType: 'module'
+            }
         }
     },
     {
         files: ['**/*.{ts,tsx,vue}'],
-        languageOptions: {
-            parserOptions: {
-                project: './tsconfig.json',
-                tsconfigRootDir: import.meta.dirname,
-            }
-        },
         plugins: {
             import: importPlugin
+        },
+        settings: {
+            'import/resolver': {
+                typescript: {
+                    alwaysTryTypes: true,
+                    project: './tsconfig.json'
+                },
+                node: {
+                    extensions: ['.js', '.jsx', '.ts', '.tsx', '.vue']
+                }
+            },
+            'import/parsers': {
+                '@typescript-eslint/parser': ['.ts', '.tsx'],
+                'vue-eslint-parser': ['.vue']
+            }
         },
         rules: {
             'import/order': [
                 1,
                 {
-                    'pathGroups': [
+                    pathGroups: [
                         {
-                            'pattern': 'vue',
-                            'group': 'external',
-                            'position': 'before'
+                            pattern: 'vue',
+                            group: 'external',
+                            position: 'before'
                         }
                     ],
                     'newlines-between': 'never'
@@ -46,7 +59,6 @@ export default defineConfig([
             ],
             'import/prefer-default-export': 0,
             'import/named': 2,
-            'import/default': 2,
             'import/no-commonjs': 2,
             'import/no-unresolved': 2,
             'import/no-nodejs-modules': 2,
@@ -59,10 +71,14 @@ export default defineConfig([
         files: ['**/*.vue'],
         languageOptions: {
             parserOptions: {
-                parser: tseslint.parser
+                parser: tseslint.parser,
+                extraFileExtensions: ['.vue'],
+                ecmaVersion: 'latest',
+                sourceType: 'module'
             }
         },
         rules: {
+            'import/default': 0,
             'vue/multi-word-component-names': 0,
             'vue/v-if-else-key': 0,
             'vue/require-default-prop': 0,
@@ -78,14 +94,14 @@ export default defineConfig([
             'vue/no-undef-components': [
                 2,
                 {
-                    'ignorePatterns': ['RouterView', 'RouterLink']
+                    ignorePatterns: ['RouterView', 'RouterLink']
                 }
             ],
             'vue/component-name-in-template-casing': [
                 2,
                 'PascalCase',
                 {
-                    'ignores': [
+                    ignores: [
                         'svg',
                         'rect',
                         'component',
@@ -99,7 +115,7 @@ export default defineConfig([
             'vue/order-in-components': [
                 2,
                 {
-                    'order': [
+                    order: [
                         'el',
                         'name',
                         'key',
@@ -135,9 +151,8 @@ export default defineConfig([
                 }
             ]
         }
-    }
-]);
-
-        }
+    },
+    {
+        ignores: ['dist', 'node_modules', '.nuxt', '.output', 'public']
     }
 ]);
